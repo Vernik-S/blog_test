@@ -3,8 +3,11 @@ from django.http import HttpResponseRedirect
 
 # Create your views here.
 
-from blog_app.models import Post
-from blog_app.forms import PostForm
+from blog_app.models import Post, Comment
+from blog_app.forms import PostForm, CommentForm
+
+
+
 
 def blog_index(request):
     posts = Post.objects.all().order_by("-created_on")
@@ -30,3 +33,22 @@ def new_post(request):
     }
 
     return render(request, "blog_app/new_post.html", context)
+
+
+def new_comment(request):
+    form = CommentForm()
+    if request.method == "POST":
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = Comment(
+                post_id=form.cleaned_data["post_id"],
+                text=form.cleaned_data["text"],
+            )
+            comment.save()
+            return HttpResponseRedirect(request.path_info)
+
+    context = {
+        "form": CommentForm(),
+    }
+
+    return render(request, "blog_app/new_comment.html", context)
