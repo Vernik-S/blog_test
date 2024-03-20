@@ -1,0 +1,17 @@
+{% block page_title %}
+    <h2>Blog Posts</h2>
+{% endblock page_title %}
+
+{% block page_content %}
+    <h3>Leave a comment:</h3>
+    <form method="post">
+        {% csrf_token %}
+        <div>
+            {{ form.title }}
+        </div>
+        <div>
+            {{ form.text }}
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+{% endblock page_content %}
